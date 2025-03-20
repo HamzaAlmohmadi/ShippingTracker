@@ -32,54 +32,7 @@ class DriverController extends Controller
 
     public function store(Request $request)
     {
-        // try {
-        //     DB::beginTransaction();
-        
-        //     $request->validate([
-        //         'name' => 'required|string|max:255',
-        //         'phone' => 'required|string|max:255',
-        //         'email' => 'nullable|email|unique:drivers,email,',
-        //         'address' => 'nullable|string|max:255',
-        //         'license_number' => 'required|string|max:255',
-        //         'truck_id' => 'required|exists:trucks,id',
-        //         'status' => 'required|in:متاح,مشغول,في الطريق',
-        //     ], [
-        //         'name.required' => 'الرجاء إدخال اسم السائق.',
-        //         'phone.required' => 'الرجاء إدخال رقم الهاتف.',
-        //         'email.email' => 'الرجاء إدخال بريد إلكتروني صالح.',
-        //         'email.unique' => 'البريد الاكتروني موجود من قبل ',
-        //         'license_number.required' => 'الرجاء إدخال رقم الرخصة.',
-        //         'truck_id.required' => 'الرجاء اختيار الشاحنة.',
-        //     ]);
-        
-        //     $user = User::create([
-        //         'name' => $request->name,
-        //         'email' => $request->email,
-        //         'password' => Hash::make($request->password),
-        //         'role' => 'driver',
-        //     ]);
-        
-        //     Driver::create([
-        //         'name' => $request->name,
-        //         'phone' => $request->phone,
-        //         'email' => $request->email,
-        //         'password' => Hash::make($request->password),
-        //         'address' => $request->address,
-        //         'license_number' => $request->license_number,
-        //         'truck_id' => $request->truck_id,
-        //         'status' => $request->status,
-        //         'user_id' => $user->id,
-        //     ]);
-        
-        //     DB::commit();
-        //     toastr()->success('تم حفظ بيانات السائق بنجاح.');
-        //     return redirect()->route('drivers.index');
-        
-        // } catch (\Exception $e) {
-        //     DB::rollback();
-        //     // toastr()->error('حدث خطأ أثناء حفظ البيانات: ' . $e->getMessage());
-        //     return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        // }
+
 
         try {
             DB::beginTransaction();
@@ -134,49 +87,7 @@ class DriverController extends Controller
         
         
 
-        // try {
-        //     $request->validate([
-        //         'name' => 'required|string|max:255',
-        //         'phone' => 'required|string|max:255',
-        //         'email' => 'nullable|email|unique:drivers,email,',
-        //         'address' => 'nullable|string|max:255',
-        //         'license_number' => 'required|string|max:255',
-        //         'truck_id' => 'required|exists:trucks,id',
-        //         'status' => 'required|in:متاح,مشغول,في الطريق',
-        //     ], [
-        //         'name.required' => 'الرجاء إدخال اسم السائق.',
-        //         'phone.required' => 'الرجاء إدخال رقم الهاتف.',
-        //         'email.email' => 'الرجاء إدخال بريد إلكتروني صالح.',
-        //         'email.unique' => 'البريد الاكتروني موجود من قبل ',
-        //         'license_number.required' => 'الرجاء إدخال رقم الرخصة.',
-        //         'truck_id.required' => 'الرجاء اختيار الشاحنة.',
-        //     ]);
 
-        //     $user = User::create([
-        //         'name' => $request->name,
-        //         'email' => $request->email,
-        //         'password' =>Hash::make($request->password),
-        //         'role' => 'driver',
-        //     ]);
-        //     Driver::create([
-        //         'name' => $request->name,
-        //         'phone' => $request->phone,
-        //         'email' => $request->email,
-        //         'password' =>Hash::make($request->password),
-        //         'address' => $request->address,
-        //         'license_number' => $request->license_number,
-        //         'truck_id' => $request->truck_id,
-        //         'user_id' => $user->id,
-        //         'status' => $request->status,
-        //     ]);
-
-        //     toastr()->success('تم حفظ بيانات السائق بنجاح.');
-        //     return redirect()->route('drivers.index');
-
-        // } catch (\Exception $e) {
-        //     // toastr()->error('حدث خطأ أثناء حفظ البيانات: ' . $e->getMessage());
-        //     return redirect()->back()->withErrors(['error' => $e->getMessage()]);
-        // }
     }
 
 
@@ -238,7 +149,7 @@ class DriverController extends Controller
     {
         try {
             Driver::findOrFail($id)->delete();
-            return response(['status' => 'success', 'message' => ' تم حذف بيانات  السائق بنجاح !']);
+            return response()->json(['status' => 'success', 'message' => ' تم حذف بيانات  السائق بنجاح !']);
 
         } catch (\Exception $e) {
             return redirect()->back()->withErrors(['error' => $e->getMessage()]);

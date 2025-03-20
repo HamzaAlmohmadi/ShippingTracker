@@ -15,24 +15,27 @@ use Yajra\DataTables\Services\DataTable;
 
 class PendingShipmentsDataTable extends DataTable
 {
-
-
-
-    
+   /**
+     * Build the DataTable class.
+     *
+     * @param QueryBuilder $query Results from query() method.
+     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $showBtn = "<a href='" . route('admin.shipment.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
-                // $deleteBtn = "<a href='" . route('admin.shipment.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-// . $deleteBtn
-                return $showBtn ;
+                return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -125,77 +128,6 @@ class PendingShipmentsDataTable extends DataTable
     {
         return 'PendingShipments_' . date('YmdHis');
     }
-
-
-
-
-    // /**
-    //  * Build the DataTable class.
-    //  *
-    //  * @param QueryBuilder $query Results from query() method.
-    //  */
-    // public function dataTable(QueryBuilder $query): EloquentDataTable
-    // {
-    //     return (new EloquentDataTable($query))
-    //         ->addColumn('action', 'pendingshipments.action')
-    //         ->setRowId('id');
-    // }
-
-    // /**
-    //  * Get the query source of dataTable.
-    //  */
-    // public function query(PendingShipment $model): QueryBuilder
-    // {
-    //     return $model->newQuery();
-    // }
-
-    // /**
-    //  * Optional method if you want to use the html builder.
-    //  */
-    // public function html(): HtmlBuilder
-    // {
-    //     return $this->builder()
-    //                 ->setTableId('pendingshipments-table')
-    //                 ->columns($this->getColumns())
-    //                 ->minifiedAjax()
-    //                 //->dom('Bfrtip')
-    //                 ->orderBy(1)
-    //                 ->selectStyleSingle()
-    //                 ->buttons([
-    //                     Button::make('excel'),
-    //                     Button::make('csv'),
-    //                     Button::make('pdf'),
-    //                     Button::make('print'),
-    //                     Button::make('reset'),
-    //                     Button::make('reload')
-    //                 ]);
-    // }
-
-    // /**
-    //  * Get the dataTable columns definition.
-    //  */
-    // public function getColumns(): array
-    // {
-    //     return [
-    //         Column::computed('action')
-    //               ->exportable(false)
-    //               ->printable(false)
-    //               ->width(60)
-    //               ->addClass('text-center'),
-    //         Column::make('id'),
-    //         Column::make('add your columns'),
-    //         Column::make('created_at'),
-    //         Column::make('updated_at'),
-    //     ];
-    // }
-
-    // /**
-    //  * Get the filename for export.
-    //  */
-    // protected function filename(): string
-    // {
-    //     return 'PendingShipments_' . date('YmdHis');
-    // }
 
 
     

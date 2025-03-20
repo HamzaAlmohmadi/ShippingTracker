@@ -16,7 +16,7 @@ use Yajra\DataTables\Services\DataTable;
 class AtDistributionCenterShipmentsDataTable extends DataTable
 {
  
-        /**
+    /**
      * Build the DataTable class.
      *
      * @param QueryBuilder $query Results from query() method.
@@ -29,10 +29,14 @@ class AtDistributionCenterShipmentsDataTable extends DataTable
                 return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -46,16 +50,20 @@ class AtDistributionCenterShipmentsDataTable extends DataTable
                 return "<span class='badge $badgeColor' title='{$statusDetails['details']}'>{$statusDetails['status']}</span>";
             })
             ->addColumn('estimated_delivery', function ($query) {
-                return "<span class='text-muted'>قيد التطوير</span>"; // نص مؤقت
+                // عرض التاريخ المتوقع للتسليم
+                if ($query->estimated_delivery_date) {
+                    return date('d-M-Y', strtotime($query->estimated_delivery_date));
+                } else {
+                    return "<span class='text-muted'>غير محدد</span>";
+                }
             })
             ->rawColumns(['action', 'status', 'estimated_delivery'])
             ->setRowId('id');
     }
 
-
-
-
-    
+    /**
+     * الحصول على تفاصيل الحالة بناءً على الكود.
+     */
     protected function getStatusDetails(string $status): array
     {
         $statuses = [
@@ -91,14 +99,6 @@ class AtDistributionCenterShipmentsDataTable extends DataTable
                 'status' => 'تم التوصيل',
                 'details' => 'تم تسليم الشحنة بنجاح'
             ],
-            // 'delayed' => [
-            //     'status' => 'تأخرت',
-            //     'details' => 'الشحنة متأخرة بسبب ظروف خارجة عن الإرادة'
-            // ],
-            // 'returned' => [
-            //     'status' => 'تم الإرجاع',
-            //     'details' => 'تم إرجاع الشحنة إلى المرسل'
-            // ],
             'canceled' => [
                 'status' => 'ملغية',
                 'details' => 'تم إلغاء الشحنة'
@@ -144,6 +144,9 @@ class AtDistributionCenterShipmentsDataTable extends DataTable
         }
     }
 
+    /**
+     * Get the query source of dataTable.
+     */
     public function query(Shipment $model): QueryBuilder
     {
         return $model->where('status', 'at_distribution_center')->newQuery(); // عرض الشحنات في مركز التوزيع فقط
@@ -200,6 +203,8 @@ class AtDistributionCenterShipmentsDataTable extends DataTable
         return 'AtDistributionCenterShipments_' . date('YmdHis');
     }
 }
+
+
 
 
 

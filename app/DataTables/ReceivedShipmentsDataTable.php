@@ -16,21 +16,27 @@ use Yajra\DataTables\Services\DataTable;
 class ReceivedShipmentsDataTable extends DataTable
 {
 
-
+        /**
+     * Build the DataTable class.
+     *
+     * @param QueryBuilder $query Results from query() method.
+     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
             ->addColumn('action', function ($query) {
                 $showBtn = "<a href='" . route('admin.shipment.show', $query->id) . "' class='btn btn-primary'><i class='far fa-eye'></i></a>";
-                // $deleteBtn = "<a href='" . route('admin.received-shipments.destroy', $query->id) . "' class='btn btn-danger ml-2 delete-item'><i class='far fa-trash-alt'></i></a>";
-                // . $deleteBtn
-                return $showBtn ;
+                return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -118,6 +124,8 @@ class ReceivedShipmentsDataTable extends DataTable
         return 'ReceivedShipments_' . date('YmdHis');
     }
 }
+
+
 
 
 

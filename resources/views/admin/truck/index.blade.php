@@ -26,29 +26,8 @@
 @endsection
 
 @push('scripts')
-    {{-- {!! $dataTable->table() !!} --}}
+
     {!! $dataTable->scripts() !!}
 
-    {{-- <script>
-        $(document).on('click', '.delete-item', function(e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            if (confirm('Are you sure you want to delete this item?')) {
-                $.ajax({
-                    url: '/trucks/' + id,
-                    type: 'get',
-                    data: {
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(result) {
-                        // قم بتحديث الصفحة أو إزالة العنصر من الجدول
-                        alert('Item deleted successfully!');
-                    },
-                    error: function(xhr, status, error) {
-                        alert('Failed to delete item: ' + error);
-                    }
-                });
-            }
-        });
-    </script> --}}
+
 @endpush

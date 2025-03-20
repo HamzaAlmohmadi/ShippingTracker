@@ -21,49 +21,6 @@ class DriverProfileController extends Controller
         return view('driver.driver-profile.index', compact('profile'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     // dd($request->all());
-    //     $request->validate([
-    //         'image' => ['nullable','image', 'max:3000'],
-    //         'name' => ['required', 'max:200'],
-    //         'phone' => ['required', 'max:50'],
-    //         'email' => ['required', 'email', 'max:200'],
-    //         'password' => ['sometimes',],
-    //         'address' => ['required'],
-    //     ]);
-    //     $user = User::find(Auth::user()->id);
-    //     $driver = Driver::where('user_id', Auth::user()->id)->first();
-
-    //     if ($request->hasFile('image')) {
-    //         $image = $request->file('image');
-    //         $imageName = time().'_'.$image->getClientOriginalName();
-    //         $image->move(public_path('uploads'), $imageName);
-    //         $Path = 'uploads/'.$imageName;
-    //         $user->update(['image' => $Path]);
-    //     }
-        
-    //     $user->update([
-    //         'name' => $request->name,
-    //         'email' => $request->email,
-    //         'password' => bcrypt($request->password),
-
-    //     ]);
-        
-    //     $driver->update([
-    //         'name' => $request->name,
-    //         'phone' => $request->phone,
-    //         'email' => $request->email,
-    //         'password' => bcrypt($request->password),
-    //         'address' => $request->address,
-
-    //     ]);
-  
-    //     toastr('تم التعديل بنجاح!', 'success');
-
-    //     return redirect()->back();
-    // }
-
     public function store(Request $request)
     {
         $this->validateRequest($request);

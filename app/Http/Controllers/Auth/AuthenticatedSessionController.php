@@ -16,7 +16,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('admin.auth.login');
+        return view('auth.login');
     }
 
     /**
@@ -40,7 +40,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->intended(route('dashboard.driver'));
             }
             else {
-                return redirect()->intended(route('user.dashboard'));
+                return redirect()->intended(route('home'));
             }
 
         }

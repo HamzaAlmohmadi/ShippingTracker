@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Backend\DriverController;
 use App\Http\Controllers\Backend\ShipmentAssignmentController;
+use App\Http\Controllers\Backend\ShipmentController;
 use App\Http\Controllers\Backend\ShipmentManagementController;
 use App\Http\Controllers\Backend\TruckController;
 
@@ -14,7 +15,7 @@ Route::get('/dashboard', function () {
     })->name('dashboard');
 
 
-    // Route::get('/trucks/destory', [TruckController::class, 'destory'])->name('trucks.destroy');
+
 
 
     Route::get('/shipments', function () {
@@ -23,12 +24,26 @@ Route::get('/dashboard', function () {
 
 
 
+
+
+
+Route::get('/shipment', [ShipmentController::class, 'index'])->name('shipment.index');
+Route::get('/shipment/create', [ShipmentController::class, 'create'])->name('shipment.create');
+Route::post('/shipment/store', [ShipmentController::class, 'store'])->name('shipment.store');
+Route::get('/shipment/edit/{id}', [ShipmentController::class, 'edit'])->name('shipment.edit');
+Route::post('/shipment/update/{id}', [ShipmentController::class, 'update'])->name('shipment.update');
+Route::delete('/shipment/destroy/{id}', [ShipmentController::class, 'destroy'])->name('shipment.destroy');
+Route::get('/api/cities', [ShipmentController::class, 'getCities']);
+
+
+
+
     Route::resource('trucks', TruckController::class);
 
     Route::resource('drivers', DriverController::class);
 
     
-        Route::get('/driver/{driver_id}/details', [DriverController::class, 'details'])->name('driver.details');
+    Route::get('/driver/{driver_id}/details', [DriverController::class, 'details'])->name('driver.details');
 
 
 

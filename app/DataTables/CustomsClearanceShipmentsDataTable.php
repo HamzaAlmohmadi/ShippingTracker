@@ -16,7 +16,7 @@ use Yajra\DataTables\Services\DataTable;
 class CustomsClearanceShipmentsDataTable extends DataTable
 {
 
-        /**
+    /**
      * Build the DataTable class.
      *
      * @param QueryBuilder $query Results from query() method.
@@ -29,10 +29,14 @@ class CustomsClearanceShipmentsDataTable extends DataTable
                 return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -67,11 +71,15 @@ class CustomsClearanceShipmentsDataTable extends DataTable
 
                 return "<span class='badge $badgeColor'>$status</span>";
             })
-
             ->addColumn('estimated_arrival', function ($query) {
-                return "<span class='text-muted'>قيد التطوير</span>"; // نص مؤقت
+                // عرض التاريخ المتوقع للوصول
+                if ($query->estimated_delivery_date) {
+                    return date('d-M-Y', strtotime($query->estimated_delivery_date));
+                } else {
+                    return "<span class='text-muted'>غير محدد</span>";
+                }
             })
-            ->rawColumns(['action', 'status','estimated_arrival'])
+            ->rawColumns(['action', 'status', 'estimated_arrival'])
             ->setRowId('id');
     }
 
@@ -116,7 +124,7 @@ class CustomsClearanceShipmentsDataTable extends DataTable
             Column::make('sender')->title('المرسل')->addClass('text-center'),
             Column::make('receiver')->title('المستلم')->addClass('text-center'),
             Column::make('date')->title('تاريخ الإنشاء')->addClass('text-center'),
-            Column::make('estimated_arrival')->title('تاريخ متوقع الوصول ')->addClass('text-center'),
+            Column::make('estimated_arrival')->title('تاريخ متوقع الوصول')->addClass('text-center'),
             Column::make('status')->title('الحالة')->addClass('text-center'),
             Column::computed('action')->title('العمليات')->addClass('text-center')
                 ->exportable(false)
@@ -129,11 +137,10 @@ class CustomsClearanceShipmentsDataTable extends DataTable
     /**
      * Get the filename for export.
      */
-
-     protected function filename(): string
-     {
-         return 'CustomsClearanceShipments_' . date('YmdHis');
-     }
+    protected function filename(): string
+    {
+        return 'CustomsClearanceShipments_' . date('YmdHis');
+    }
 }
 
 

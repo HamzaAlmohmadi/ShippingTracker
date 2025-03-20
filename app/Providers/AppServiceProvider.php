@@ -23,15 +23,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Paginator::useBootstrap();
 
-        // $this->configureRateLimiting();
-
-        // $this->routes(function () {
-
-        //     Route::middleware(['web',])
-        //     ->prefix('driver')
-        //     // ->as('driver.')
-        //     ->group(base_path('routes/driver.php'));
-        // // });
 
         
         Route::middleware(['web']) // تطبيق Middleware هنا

@@ -15,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class CanceledShipmentsDataTable extends DataTable
 {
+
         /**
      * Build the DataTable class.
      *
@@ -28,10 +29,14 @@ class CanceledShipmentsDataTable extends DataTable
                 return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -42,19 +47,23 @@ class CanceledShipmentsDataTable extends DataTable
 
                 $badgeColor = $this->getStatusColor($status); // الحصول على اللون المناسب للحالة
 
-                // return "<span class='badge $badgeColor'>$status</span>";
                 return "<span class='badge $badgeColor' title='{$statusDetails['details']}'>{$statusDetails['status']}</span>";
             })
             ->addColumn('canceled_date', function ($query) {
-                return date('d-M-Y', strtotime($query->updated_at)); // تاريخ الإلغاء
+                // عرض تاريخ الإلغاء
+                if ($query->updated_at) {
+                    return date('d-M-Y', strtotime($query->updated_at));
+                } else {
+                    return "<span class='text-muted'>غير محدد</span>";
+                }
             })
             ->rawColumns(['action', 'status', 'canceled_date'])
             ->setRowId('id');
     }
 
-
-
-    
+    /**
+     * الحصول على تفاصيل الحالة بناءً على الكود.
+     */
     protected function getStatusDetails(string $status): array
     {
         $statuses = [
@@ -90,14 +99,6 @@ class CanceledShipmentsDataTable extends DataTable
                 'status' => 'تم التوصيل',
                 'details' => 'تم تسليم الشحنة بنجاح'
             ],
-            // 'delayed' => [
-            //     'status' => 'تأخرت',
-            //     'details' => 'الشحنة متأخرة بسبب ظروف خارجة عن الإرادة'
-            // ],
-            // 'returned' => [
-            //     'status' => 'تم الإرجاع',
-            //     'details' => 'تم إرجاع الشحنة إلى المرسل'
-            // ],
             'canceled' => [
                 'status' => 'ملغية',
                 'details' => 'تم إلغاء الشحنة'
@@ -143,6 +144,9 @@ class CanceledShipmentsDataTable extends DataTable
         }
     }
 
+    /**
+     * Get the query source of dataTable.
+     */
     public function query(Shipment $model): QueryBuilder
     {
         return $model->where('status', 'canceled')->newQuery(); // عرض الشحنات الملغاة فقط
@@ -199,6 +203,7 @@ class CanceledShipmentsDataTable extends DataTable
         return 'CanceledShipments_' . date('YmdHis');
     }
 }
+
 
 
 

@@ -2,385 +2,108 @@
 
 namespace Database\Seeders;
 
+use App\Models\Shipment;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
+use Carbon\Carbon;
 
 class ShipmentsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
-    public function run(): void
-    {
-        
 
-        $shipments = [
-            [
-                'tracking_number' => 'TN123456789',
-                'status' => 'pending',
-                'weight' => 5.5,
-                'notes' => 'First shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '123 Main St, City A',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '456 Elm St, City B',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN987654321',
-                'status' => 'in_transit',
-                'weight' => 10.0,
-                'notes' => 'Second shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '789 Oak St, City C',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '321 Pine St, City D',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN112233445',
-                'status' => 'delivered',
-                'weight' => 7.2,
-                'notes' => 'Third shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '101 Maple St, City E',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '202 Birch St, City F',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN556677889',
-                'status' => 'pending',
-                'weight' => 3.8,
-                'notes' => 'Fourth shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '303 Cedar St, City G',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '404 Walnut St, City H',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN998877665',
-                'status' => 'in_transit',
-                'weight' => 12.5,
-                'notes' => 'Fifth shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '505 Spruce St, City I',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '606 Fir St, City J',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN334455667',
-                'status' => 'delivered',
-                'weight' => 6.0,
-                'notes' => 'Sixth shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '707 Ash St, City K',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '808 Beech St, City L',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN778899001',
-                'status' => 'pending',
-                'weight' => 4.5,
-                'notes' => 'Seventh shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '909 Cedar St, City M',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '1010 Elm St, City N',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN223344556',
-                'status' => 'in_transit',
-                'weight' => 8.7,
-                'notes' => 'Eighth shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '1111 Oak St, City O',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '1212 Pine St, City P',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN667788990',
-                'status' => 'delivered',
-                'weight' => 9.3,
-                'notes' => 'Ninth shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '1313 Maple St, City Q',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '1414 Birch St, City R',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'tracking_number' => 'TN445566778',
-                'status' => 'pending',
-                'weight' => 2.0,
-                'notes' => 'Tenth shipment',
-                'from_country_id' => 1,
-                'from_city_id' => 1,
-                'from_address' => '1515 Cedar St, City S',
-                'to_country_id' => 1,
-                'to_city_id' => 1,
-                'to_address' => '1616 Walnut St, City T',
-                'driver_id' => 1,
-                'sender_id' => 1,
-                'receiver_id' => 1,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ];
-
-        DB::table('shipments')->insert($shipments);
+     
+     public function run()
+     {
+         $faker = Faker::create('ar_SA'); // استخدام Faker باللغة العربية
+ 
+         $statuses = [
+             'pending',
+             'received',
+             'in_transit',
+             'customs_clearance',
+             'customs_held',
+             'out_for_delivery',
+             'at_distribution_center',
+             'delivered',
+             'canceled',
+         ];
+ 
+         for ($i = 0; $i < 15; $i++) {
+             $packageType = $faker->randomElement(['صندوق', 'ظرف']);
+             $dimensions = $this->calculateDimensions($packageType, $faker);
+ 
+             Shipment::create([
+                // 'tracking_number' => 'SHIP-' . now()->format('Ymd') . '-' . $faker->unique()->numberBetween(1000, 9999),
+                'tracking_number' => $faker->unique()->numberBetween(1000000000, 9999999999),
+                 'status' => $faker->randomElement($statuses),
+                 'weight' => $faker->numberBetween(1, 20),
+                 'notes' => $faker->sentence,
+                 'user_id' => 1, // المستخدم ثابت
+                 'from_country_id' => $faker->numberBetween(1, 3),
+                 'from_city_id' => $faker->numberBetween(1, 3),
+                 'to_country_id' => $faker->numberBetween(1, 3),
+                 'to_city_id' => $faker->numberBetween(1, 3),
+                 'sender_data' => json_encode([
+                     'name' => $faker->name,
+                     'phone' => $faker->phoneNumber,
+                     'email' => $faker->email,
+                     'district' => $faker->city,
+                     'street' => $faker->streetName,
+                     'building' => $faker->buildingNumber,
+                     'floor' => $faker->randomElement([null, $faker->numberBetween(1, 10)]),
+                     'additional_info' => $faker->sentence,
+                 ]),
+                 'receiver_data' => json_encode([
+                     'name' => $faker->name,
+                     'phone' => $faker->phoneNumber,
+                     'district' => $faker->city,
+                     'street' => $faker->streetName,
+                     'building' => $faker->buildingNumber,
+                     'floor' => $faker->randomElement([null, $faker->numberBetween(1, 10)]),
+                     'additional_info' => $faker->sentence,
+                 ]),
+                 'driver_id' => 1, // السائق ثابت
+                 'shipping_date' => Carbon::now(),
+                 'estimated_delivery_date' => Carbon::now()->addDays($faker->numberBetween(1, 10)),
+                 'actual_delivery_date' => $faker->randomElement([null, Carbon::now()->addDays($faker->numberBetween(1, 10))]),
+                 'package_type' => $packageType,
+                 'dimensions' => json_encode($dimensions),
+                 'payment_status' => $faker->randomElement(['مدفوع', 'غير مدفوع']),
+                 'payment_method' => $faker->randomElement(['بطاقة ائتمان', 'تحويل بنكي', 'نقدي']),
+             ]);
+         }
+     }
+ 
+     private function calculateDimensions(string $packageType, $faker): array
+     {
+         if ($packageType === 'صندوق') {
+             return [
+                 'type' => 'صندوق',
+                 'length' => $faker->numberBetween(10, 100),
+                 'width' => $faker->numberBetween(10, 100),
+                 'price' => $faker->numberBetween(100, 1000),
+             ];
+         }
+ 
+         if ($packageType === 'ظرف') {
+             return [
+                 'type' => 'ظرف',
+                 'weight' => $faker->numberBetween(1, 10),
+                 'thickness' => $faker->numberBetween(1, 5),
+                 'price' => $faker->numberBetween(50, 500),
+             ];
+         }
+ 
+         return [];
+     }
 
 
-    }
 }
 
 
 
 
-
-
-
-
-// use Illuminate\Database\Seeder;
-// use Illuminate\Support\Facades\DB;
-
-// class ShipmentsTableSeeder extends Seeder
-// {
-//     public function run()
-//     {
-//         $shipments = [
-//             [
-//                 'tracking_number' => 'TN123456789',
-//                 'status' => 'pending',
-//                 'weight' => 5.5,
-//                 'notes' => 'First shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '123 Main St, City A',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '456 Elm St, City B',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN987654321',
-//                 'status' => 'in_transit',
-//                 'weight' => 10.0,
-//                 'notes' => 'Second shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '789 Oak St, City C',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '321 Pine St, City D',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN112233445',
-//                 'status' => 'delivered',
-//                 'weight' => 7.2,
-//                 'notes' => 'Third shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '101 Maple St, City E',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '202 Birch St, City F',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN556677889',
-//                 'status' => 'pending',
-//                 'weight' => 3.8,
-//                 'notes' => 'Fourth shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '303 Cedar St, City G',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '404 Walnut St, City H',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN998877665',
-//                 'status' => 'in_transit',
-//                 'weight' => 12.5,
-//                 'notes' => 'Fifth shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '505 Spruce St, City I',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '606 Fir St, City J',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN334455667',
-//                 'status' => 'delivered',
-//                 'weight' => 6.0,
-//                 'notes' => 'Sixth shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '707 Ash St, City K',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '808 Beech St, City L',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN778899001',
-//                 'status' => 'pending',
-//                 'weight' => 4.5,
-//                 'notes' => 'Seventh shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '909 Cedar St, City M',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '1010 Elm St, City N',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN223344556',
-//                 'status' => 'in_transit',
-//                 'weight' => 8.7,
-//                 'notes' => 'Eighth shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '1111 Oak St, City O',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '1212 Pine St, City P',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN667788990',
-//                 'status' => 'delivered',
-//                 'weight' => 9.3,
-//                 'notes' => 'Ninth shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '1313 Maple St, City Q',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '1414 Birch St, City R',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//             [
-//                 'tracking_number' => 'TN445566778',
-//                 'status' => 'pending',
-//                 'weight' => 2.0,
-//                 'notes' => 'Tenth shipment',
-//                 'from_country_id' => 1,
-//                 'from_city_id' => 1,
-//                 'from_address' => '1515 Cedar St, City S',
-//                 'to_country_id' => 1,
-//                 'to_city_id' => 1,
-//                 'to_address' => '1616 Walnut St, City T',
-//                 'driver_id' => 1,
-//                 'sender_id' => 1,
-//                 'receiver_id' => 1,
-//                 'created_at' => now(),
-//                 'updated_at' => now(),
-//             ],
-//         ];
-
-//         DB::table('shipments')->insert($shipments);
-//     }
-// }

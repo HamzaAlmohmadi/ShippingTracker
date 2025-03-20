@@ -15,6 +15,7 @@ use Yajra\DataTables\Services\DataTable;
 
 class InTransitShipmentsDataTable extends DataTable
 {
+
         /**
      * Build the DataTable class.
      *
@@ -28,10 +29,14 @@ class InTransitShipmentsDataTable extends DataTable
                 return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -126,5 +131,6 @@ class InTransitShipmentsDataTable extends DataTable
     }
     
 }
+
 
 

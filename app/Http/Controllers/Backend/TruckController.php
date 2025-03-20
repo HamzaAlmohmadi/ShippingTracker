@@ -78,13 +78,19 @@ class TruckController extends Controller
     }
 
     
-    public function destroy($id)  
-    {  dd($id);
+
+
+    public function destroy(string $id)
+    {
+
         $truck = Truck::findOrFail($id);  
         $truck->delete();  
     
-        return redirect()->route('trucks.index')->with('success', 'تم حذف العنصر بنجاح');  
+        return response()->json(['status' => 'success', 'message' => ' تم حذف بيانات   بنجاح !']);
+
+
     }
+    
 }
 
 

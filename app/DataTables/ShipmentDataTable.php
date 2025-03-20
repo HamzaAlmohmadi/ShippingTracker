@@ -15,68 +15,81 @@ use Yajra\DataTables\Services\DataTable;
 class ShipmentDataTable extends DataTable
 {
 
+
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
-            ->addColumn('status', function ($query) {
-                $statusColors = [
-                    'جديدة' => 'limegreen',
-                    'قيد التوصيل' => 'orange',
-                    'مكتملة' => 'blue',
-                ];
-                
-                $statusText = [
-                    'جديدة' => 'جديدة',
-                    'قيد التوصيل' => 'قيد التوصيل',
-                    'مكتملة' => 'مكتملة',
-                ];
-
-                $color = $statusColors[$query->status] ?? 'black';
-                $text = $statusText[$query->status] ?? $query->status;
-
-                return '<span style="background-color: ' . $color . '; color: white; padding: 5px; border-radius: 3px;">' . $text . '</span>';
+            ->addColumn('sender_name', function ($query) {
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد';
+            })
+            ->addColumn('receiver_name', function ($query) {
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد';
+            })
+            ->addColumn('from_city', function ($query) {
+                return $query->fromCity ? $query->fromCity->name : 'غير محدد';
+            })
+            ->addColumn('to_city', function ($query) {
+                return $query->toCity ? $query->toCity->name : 'غير محدد';
+            })
+            ->addColumn('package_type', function ($query) {
+                return $query->package_type ?? 'غير محدد';
+            })
+            ->addColumn('payment_status', function ($query) {
+                return $query->payment_status ?? 'غير محدد';
             })
             ->addColumn('actions', function ($query) {
-                $editBtn = "<a href='".route('shipments.edit', $query->id)."' class='btn btn-primary'><i class='far fa-edit'></i></a>";
-                $deleteBtn = "<a href='".route('shipments.destroy', $query->id)."' class='btn btn-danger delete-item'><i class='far fa-trash-alt'></i></a>";
+                $editBtn = "<a href='".route('admin.shipment.edit', $query->id)."' class='btn btn-primary'><i class='far fa-edit'></i></a>";
+                $deleteBtn = "<a href='".route('admin.shipment.destroy', $query->id)."' class='btn btn-danger delete-item'><i class='far fa-trash-alt'></i></a>";
                 return $editBtn.$deleteBtn;
             })
-            ->rawColumns(['status', 'actions']) // اجعل الأعمدة قابلة لعرض HTML
+            ->rawColumns(['sender_name', 'receiver_name', 'from_city', 'to_city', 'package_type', 'payment_status', 'actions'])
             ->setRowId('id');
     }
 
     public function query(Shipment $model): QueryBuilder
     {
-        return $model->newQuery();
+        return $model->newQuery()->with(['driver', 'sender', 'receiver', 'fromCountry', 'fromCity', 'toCountry', 'toCity']);
     }
 
     public function html(): HtmlBuilder
     {
         return $this->builder()
-            ->setTableId('shipment-table')
-            ->columns($this->getColumns())
-            ->minifiedAjax()
-            ->dom('<"d-flex justify-content-between align-items-center mb-3"<"length-container"l><"btn-container"B><"search-container"f>>rtip')
-            ->buttons([
-                Button::make('excel'),
-                Button::make('csv'),
-                Button::make('pdf'),
-                Button::make('print'),
-                Button::make('reset'),
-                Button::make('reload')
-            ]);
+                    ->setTableId('shipment-table')
+                    ->columns($this->getColumns())
+                    ->minifiedAjax()
+                    ->dom('<"d-flex justify-content-between align-items-center mb-3"<"length-container"l><"btn-container"B><"search-container"f>>rtip')
+                    // ->orderBy(0)
+                    ->selectStyleSingle()
+                    ->buttons([
+                        Button::make('excel'),
+                        Button::make('csv'),
+                        Button::make('pdf'),
+                        Button::make('print'),
+                        Button::make('reset'),
+                        Button::make('reload')
+                    ]);
     }
 
     public function getColumns(): array
     {
         return [
             Column::make('id')->title('ID')->addClass('text-center'),
-            Column::make('status')->title('الحالة')->addClass('text-center'),
-            Column::make('driver_id')->title('رقم السائق')->addClass('text-center'),
-            Column::make('created_at')->title('تاريخ الإنشاء')->addClass('text-center'),
+            Column::make('tracking_number')->title('رقم الشحنة')->addClass('text-center'),
+            Column::make('status')->title('حالة الشحنة')->addClass('text-center'),
+            Column::make('weight')->title('الوزن')->addClass('text-center'),
+            Column::make('sender_name')->title('اسم المرسل')->addClass('text-center'),
+            Column::make('receiver_name')->title('اسم المستلم')->addClass('text-center'),
+            Column::make('from_city')->title('المدينة المرسلة')->addClass('text-center'),
+            Column::make('to_city')->title('المدينة المستقبلة')->addClass('text-center'),
+            Column::make('package_type')->title('نوع الطرد')->addClass('text-center'),
+            Column::make('payment_status')->title('حالة الدفع')->addClass('text-center'),
             Column::computed('actions')->title('العمليات')->addClass('text-center')
-                ->exportable(false) // لا يتم تصديره
-                ->printable(false) // لا يتم طباعته
+                ->exportable(false)
+                ->printable(false)
                 ->width(120)
                 ->addClass('text-center'),
         ];
@@ -86,7 +99,20 @@ class ShipmentDataTable extends DataTable
     {
         return 'Shipment_' . date('YmdHis');
     }
+
+
+
+
+ 
+
+
+
+
+
 }
+
+
+
 
 
 

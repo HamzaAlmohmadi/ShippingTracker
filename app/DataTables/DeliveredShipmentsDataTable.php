@@ -16,7 +16,11 @@ use Yajra\DataTables\Services\DataTable;
 class DeliveredShipmentsDataTable extends DataTable
 {
 
-    
+    /**
+     * Build the DataTable class.
+     *
+     * @param QueryBuilder $query Results from query() method.
+     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -25,10 +29,14 @@ class DeliveredShipmentsDataTable extends DataTable
                 return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -61,7 +69,12 @@ class DeliveredShipmentsDataTable extends DataTable
                 return "<span class='badge $badgeColor'>$status</span>";
             })
             ->addColumn('delivery_date', function ($query) {
-                return date('d-M-Y', strtotime($query->updated_at)); // تاريخ التسليم
+                // عرض تاريخ التسليم
+                if ($query->updated_at) {
+                    return date('d-M-Y', strtotime($query->updated_at));
+                } else {
+                    return "<span class='text-muted'>غير محدد</span>";
+                }
             })
             ->rawColumns(['action', 'status', 'delivery_date'])
             ->setRowId('id');
@@ -108,7 +121,7 @@ class DeliveredShipmentsDataTable extends DataTable
             Column::make('sender')->title('المرسل')->addClass('text-center'),
             Column::make('receiver')->title('المستلم')->addClass('text-center'),
             Column::make('date')->title('تاريخ الإنشاء')->addClass('text-center'),
-            Column::make('delivery_date')->title('تاريخ  التسليم')->addClass('text-center'),
+            Column::make('delivery_date')->title('تاريخ التسليم')->addClass('text-center'),
             Column::make('status')->title('الحالة')->addClass('text-center'),
             Column::computed('action')->title('العمليات')->addClass('text-center')
                 ->exportable(false)
@@ -126,3 +139,10 @@ class DeliveredShipmentsDataTable extends DataTable
         return 'DeliveredShipments_' . date('YmdHis');
     }
 }
+
+
+
+
+
+
+

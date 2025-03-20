@@ -19,19 +19,23 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        User::create([
-            'name' => 'admin',
-            'email' => 'admin@gmail.com',
-            'password' => bcrypt('12345678'),
-            'role' => 'admin',
-        ]);
+        // User::create([
+        //     'name' => 'admin',
+        //     'email' => 'admin@gmail.com',
+        //     'password' => bcrypt('12345678'),
+        //     'role' => 'admin',
+        // ]);
 
         $this->call([
+            UsersTableSeede::class,
             CountryTableSeeder::class,
             CityTableSeeder::class,
             TruckSeeder::class,
+            DriverSeeder::class,
+            SendersTableSeeder::class,
+            ReceiversTableSeeder::class,
             ShipmentsTableSeeder::class,
-            // DriverSeeder::class,
+
         ]);
     }
 }

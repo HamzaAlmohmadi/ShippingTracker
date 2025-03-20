@@ -80,11 +80,7 @@ class ShipmentManagementController extends Controller
     }
 
 
-    // // 9. الشحنات المتأخرة
-    // public function delayedShipments(DelayedShipmentsDataTable $dataTable)
-    // {
-    //     return $dataTable->render('admin.shipment_management.delayed_index');
-    // }
+
 
 
     // 11. الشحنات الملغاة
@@ -96,11 +92,25 @@ class ShipmentManagementController extends Controller
 
 
 
+    // public function show(string $id)
+    // {
+    //     //  dd($id);
+    //     $shipment = Shipment::findOrFail($id);
+
+    //     return view('admin.shipment_management.show', compact('shipment'));
+    // }
+
     public function show(string $id)
     {
-        //  dd($id);
+        // جلب بيانات الشحنة
         $shipment = Shipment::findOrFail($id);
-
+    
+        // تحويل الحقول JSON إلى مصفوفة
+        $shipment->sender_data = json_decode($shipment->sender_data, true);
+        $shipment->receiver_data = json_decode($shipment->receiver_data, true);
+        $shipment->dimensions = json_decode($shipment->dimensions, true);
+    
+        // إرسال البيانات إلى العرض
         return view('admin.shipment_management.show', compact('shipment'));
     }
 

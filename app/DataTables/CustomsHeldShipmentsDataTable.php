@@ -16,7 +16,7 @@ use Yajra\DataTables\Services\DataTable;
 class CustomsHeldShipmentsDataTable extends DataTable
 {
 
-        /**
+    /**
      * Build the DataTable class.
      *
      * @param QueryBuilder $query Results from query() method.
@@ -29,10 +29,14 @@ class CustomsHeldShipmentsDataTable extends DataTable
                 return $showBtn;
             })
             ->addColumn('sender', function ($query) {
-                return $query->sender->name; // عرض اسم المرسل
+                // تحويل sender_data من JSON إلى مصفوفة
+                $senderData = json_decode($query->sender_data, true);
+                return $senderData['name'] ?? 'غير محدد'; // عرض اسم المرسل
             })
             ->addColumn('receiver', function ($query) {
-                return $query->receiver->name; // عرض اسم المستلم
+                // تحويل receiver_data من JSON إلى مصفوفة
+                $receiverData = json_decode($query->receiver_data, true);
+                return $receiverData['name'] ?? 'غير محدد'; // عرض اسم المستلم
             })
             ->addColumn('date', function ($query) {
                 return date('d-M-Y', strtotime($query->created_at)); // تاريخ الإنشاء
@@ -68,7 +72,12 @@ class CustomsHeldShipmentsDataTable extends DataTable
                 return "<span class='badge $badgeColor'>$status</span>";
             })
             ->addColumn('estimated_release', function ($query) {
-                return "<span class='text-muted'>قيد التطوير</span>"; // نص مؤقت
+                // عرض التاريخ المتوقع للإفراج
+                if ($query->estimated_delivery_date) {
+                    return date('d-M-Y', strtotime($query->estimated_delivery_date));
+                } else {
+                    return "<span class='text-muted'>غير محدد</span>";
+                }
             })
             ->rawColumns(['action', 'status', 'estimated_release'])
             ->setRowId('id');
@@ -133,8 +142,6 @@ class CustomsHeldShipmentsDataTable extends DataTable
         return 'CustomsHeldShipments_' . date('YmdHis');
     }
 }
-
-
 
 
 

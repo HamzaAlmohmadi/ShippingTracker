@@ -2,74 +2,92 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Shipment extends Model
 {
     
-    protected $fillable = [
-        'tracking_number',
-        'weight',
-        'notes',
-        'from_country_id',
-        'from_city_id',
-        'from_address',
-        'to_country_id',
-        'to_city_id',
-        'to_address',
-        'sender_id',
-        'receiver_id',
-        'driver_id',
-        'status',
-    ];
 
+    use HasFactory;
 
-    
-
-
-
-    public function  FromCountry()
+    protected $guarded = [];
+   
+    // العلاقة مع جدول الدول (البلد المرسل)
+    public function fromCountry()
     {
-        return $this->belongsTo(Country::class,'from_country_id');
+        return $this->belongsTo(Country::class, 'from_country_id');
     }
 
-    public function  FromCity()
+    // العلاقة مع جدول المدن (المدينة المرسلة)
+    public function fromCity()
     {
-        return $this->belongsTo(City::class,'from_city_id');
+        return $this->belongsTo(City::class, 'from_city_id');
     }
 
-    public function  ToCountry()
+    // العلاقة مع جدول الدول (البلد المستقبل)
+    public function toCountry()
     {
-        return $this->belongsTo(Country::class,'to_country_id');
+        return $this->belongsTo(Country::class, 'to_country_id');
     }
 
-    public function  ToCity()
+    // العلاقة مع جدول المدن (المدينة المستقبلة)
+    public function toCity()
     {
-        return $this->belongsTo(City::class,'to_city_id');
+        return $this->belongsTo(City::class, 'to_city_id');
     }
 
-
-    public function  Sender()
+    // العلاقة مع جدول المرسلين
+    public function sender()
     {
-        return $this->belongsTo(Sender::class,'sender_id');
+        return $this->belongsTo(Sender::class, 'sender_id');
     }
 
-    public function  Receiver()
+    // العلاقة مع جدول المستلمين
+    public function receiver()
     {
-        return $this->belongsTo(Receiver::class,'receiver_id');
+        return $this->belongsTo(Receiver::class, 'receiver_id');
     }
 
-    public function Driver()
+    // العلاقة مع جدول السائقين
+    public function driver()
     {
-        return $this->belongsTo(Driver::class,'driver_id');
+        return $this->belongsTo(Driver::class, 'driver_id');
     }
+
+    // دالة لتوليد رقم التتبع
+    // public static function generateTrackingNumber()
+    // {
+    //     // توليد رقم عشوائي مزج بالتاريخ والوقت
+    //     $randomNumber = mt_rand(1000, 9999);
+    //     return 'SHIP-' . date('Ymd') . '-' . $randomNumber;
+    // }
 
     public static function generateTrackingNumber()
     {
-        // توليد رقم عشوائي مزج بالتاريخ والوقت
-        $randomNumber = mt_rand(1000, 9999);
-        return 'SHIP-' . date('Ymd') . '-' . $randomNumber;
+        do {
+            // توليد رقم عشوائي مكون من 10 أرقام
+            $trackingNumber = mt_rand(1000000000, 9999999999);
+    
+            // التحقق من عدم وجود الرقم مسبقًا في قاعدة البيانات
+            $exists = Shipment::where('tracking_number', $trackingNumber)->exists();
+        } while ($exists); // كرر العملية إذا كان الرقم موجودًا مسبقًا
+    
+        return $trackingNumber;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
