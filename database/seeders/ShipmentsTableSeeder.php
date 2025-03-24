@@ -42,7 +42,7 @@ class ShipmentsTableSeeder extends Seeder
                  'status' => $faker->randomElement($statuses),
                  'weight' => $faker->numberBetween(1, 20),
                  'notes' => $faker->sentence,
-                 'user_id' => 1, // المستخدم ثابت
+                 'user_id' =>$faker->numberBetween(1, 3) , // المستخدم ثابت
                  'from_country_id' => $faker->numberBetween(1, 3),
                  'from_city_id' => $faker->numberBetween(1, 3),
                  'to_country_id' => $faker->numberBetween(1, 3),

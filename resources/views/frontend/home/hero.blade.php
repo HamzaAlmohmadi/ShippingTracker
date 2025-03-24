@@ -16,12 +16,16 @@
                     نحن نضمن توصيل شحناتك بسرعة وأمان، مع نظام تتبع لحظي وفرق متخصصة لضمان تجربة سلسة واحترافية.
                 </p>
 
-                <form action="#" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
+                {{-- <form action="{{ route('shipment-tracking') }}" method="GET" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up"
                     data-aos-delay="200">
                     <input type="text" class="form-control" placeholder="أدخل رقم التتبع الخاص بك">
                     <button type="submit" class="btn btn-primary">تتبع الآن</button>
-                </form>
+                </form> --}}
 
+                <form action="{{ route('shipment-tracking') }}" method="GET" class="form-search d-flex align-items-stretch mb-3" data-aos="fade-up" data-aos-delay="200">
+                    <input type="text" class="form-control" name="tracker" placeholder="أدخل رقم التتبع الخاص بك">
+                    <button type="submit" class="btn btn-primary">تتبع الآن</button>
+                </form>
                 <div class="row gy-4" data-aos="fade-up" data-aos-delay="300">
 
                     <div class="col-lg-3 col-6">

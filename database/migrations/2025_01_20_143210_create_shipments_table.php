@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('tracking_number')->unique(); // رقم الشحنة
             $table->string('status'); // حالة الشحنة
             $table->decimal('weight')->nullable(); // وزن الشحنة
-            $table->text('notes')->nullable();
+            $table->string('notes')->nullable();
         
             // ربط الشحنة بالمستخدم
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
